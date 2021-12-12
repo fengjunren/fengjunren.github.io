@@ -435,6 +435,8 @@ function webViewerPageNumberChanged(evt) {
 }
 let request=GetRequest();
 
+let hasChanged=false
+let hasHightLight=false
 function start() {
   setTimeout(function () {
     console.log('request:',request)
@@ -458,14 +460,15 @@ function start() {
     PDFViewerApplication.eventBus.on("pagerendered", function(event) {
       console.log("The page is now rendered", event.pageNumber);
       console.log(`---${event.pageNumber}----`,`---${request.page}----`)
-      if(parseInt(event.pageNumber)===1){
+      if(parseInt(event.pageNumber)>=1&&!hasChanged){
         console.log('----webViewerPageNumberChanged----')
-        
+        hasChanged=true
         if(request.page)webViewerPageNumberChanged({
   value:request.page
 })
       }
-      if(parseInt(event.pageNumber)===parseInt(request.page)){
+      if(parseInt(event.pageNumber)===parseInt(request.page)&&!hasHightLight){
+        hasHightLight=true
         console.log('----wordHighLight----')
         wordHighLight(request.keyword);
       }
