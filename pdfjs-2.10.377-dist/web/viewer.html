@@ -431,20 +431,43 @@ function webViewerPageNumberChanged(evt) {
   if (evt.value !== pdfViewer.currentPageNumber.toString() && evt.value !== pdfViewer.currentPageLabel) {
     PDFViewerApplication.toolbar.setPageNumber(pdfViewer.currentPageNumber, pdfViewer.currentPageLabel);
   }
+
 }
+let request=GetRequest();
 
-
-    setTimeout(function () {
-      let request=GetRequest();
+function start() {
+  setTimeout(function () {
     console.log('request:',request)
     console.log('keyword:',request.keyword)
     console.log('page:',request.page)
     if(request.page)webViewerPageNumberChanged({
   value:request.page
 })
-    if(request.keyword)wordHighLight(request.keyword);
+    // if(request.keyword)wordHighLight(request.keyword);
     },1*1000)
+}
+start()
     
+    document.addEventListener("webviewerloaded", function() {
+  PDFViewerApplication.initializedPromise.then(function() {
+    // The viewer has now been initialized.
+
+    PDFViewerApplication.eventBus.on("pagechanging", function(event) {
+      console.log("The page container is now visible", event.pageNumber);
+    });
+    PDFViewerApplication.eventBus.on("pagerendered", function(event) {
+      console.log("The page is now rendered", event.pageNumber);
+      console.log(`---${event.pageNumber}----`,`---${request.page}----`)
+      if(parseInt(event.pageNumber)===parseInt(request.page)){
+        console.log('----wordHighLight----')
+        wordHighLight(request.keyword);
+      }
+    });
+    PDFViewerApplication.eventBus.on("textlayerrendered", function(event) {
+      console.log("The textLayer is now rendered", event.pageNumber);
+    });
+  });
+});
  
     // init()
   </script>
