@@ -458,9 +458,16 @@ function start() {
     PDFViewerApplication.eventBus.on("pagerendered", function(event) {
       console.log("The page is now rendered", event.pageNumber);
       console.log(`---${event.pageNumber}----`,`---${request.page}----`)
+      if(parseInt(event.pageNumber)===1){
+        console.log('----webViewerPageNumberChanged----')
+        
+        if(request.page)webViewerPageNumberChanged({
+  value:request.page
+})
+      }
       if(parseInt(event.pageNumber)===parseInt(request.page)){
         console.log('----wordHighLight----')
-        // wordHighLight(request.keyword);
+        wordHighLight(request.keyword);
       }
     });
     PDFViewerApplication.eventBus.on("textlayerrendered", function(event) {

@@ -534,7 +534,7 @@ const PDFViewerApplication = {
     });
 
     this._initializedCapability.resolve();
-    setTimeout(this.findKeyWordAndPage,1*1000)
+    // setTimeout(this.findKeyWordAndPage,1*1000)
     // this.findKeyWordAndPage()
   },
   findKeyWordAndPage(){
