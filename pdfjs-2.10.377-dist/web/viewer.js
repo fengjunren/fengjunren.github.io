@@ -507,6 +507,7 @@ const PDFViewerApplication = {
   _saveInProgress: false,
   _wheelUnusedTicks: 0,
   _idleCallbacks: new Set(),
+  onInitFinished:null,
 
   async initialize(appConfig) {
     this.preferences = this.externalServices.createPreferences();
@@ -533,8 +534,21 @@ const PDFViewerApplication = {
     });
 
     this._initializedCapability.resolve();
+    setTimeout(this.findKeyWordAndPage,1*1000)
+    // this.findKeyWordAndPage()
   },
-
+  findKeyWordAndPage(){
+    let request=GetRequest();
+    console.log('request:',request)
+    console.log('keyword:',request.keyword)
+    console.log('page:',request.page)
+    // setTimeout(function () {
+      if(request.page)webViewerPageNumberChanged({
+    value:request.page
+  })
+      if(request.keyword)wordHighLight(request.keyword);
+      // },1*1000)
+  },
   async _readPreferences() {
     if (_app_options.AppOptions.get("disablePreferences")) {
       return;
